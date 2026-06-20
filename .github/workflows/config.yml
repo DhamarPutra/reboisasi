@@ -26,7 +26,7 @@ jobs:
       run: |
           git config user.name 'DhamarPutra'
           git config user.email 'damarputra0191@gmail.com'
-          git remote set-url origin https://DhamarPutra:${{ secrets.autocommit }}@github.com/DhamarPutra/reforestation.git
+          git remote set-url origin https://DhamarPutra:${{ secrets.autocommit }}@github.com/DhamarPutra/reboisasi.git
       env:
           GITHUB_TOKEN: ${{ secrets.autocommit }}
     - name: Auto GIT
