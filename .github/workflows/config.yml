@@ -1,5 +1,8 @@
 name: auto commit
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: main
@@ -7,33 +10,30 @@ on:
   schedule:
     - cron: '*/7 * * * *'
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v4
       with:
-        node-version: '14.x'
+        persist-credentials: true
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
     - name: Install Node-Fetch
       run: npm install
     - name: Update README.md
       run: node index.js > README.md
-    - name: Commit change & Push
+    - name: Commit & Push changes
       run: |
-          git config user.name 'DhamarPutra'
-          git config user.email 'damarputra0191@gmail.com'
-          git remote set-url origin https://DhamarPutra:${{ secrets.autocommit }}@github.com/DhamarPutra/reboisasi.git
-      env:
-          GITHUB_TOKEN: ${{ secrets.autocommit }}
-    - name: Auto GIT
-      run: |
-          git status
-          git add .
-          git commit -am "Jangan Lupa Follow https://www.instagram.com/damarp_p"
-          git push
-      env:
-          GITHUB_TOKEN: ${{ secrets.token_gh }}
+        git config user.name 'DhamarPutra'
+        git config user.email 'damarputra0191@gmail.com'
+        git add README.md
+        # Hanya commit dan push jika ada perubahan pada README.md
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Jangan Lupa Follow https://www.instagram.com/damarp_p" && git push)
